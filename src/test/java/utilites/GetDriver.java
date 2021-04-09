@@ -2,12 +2,9 @@ package utilites;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.WebElement;
-
 import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.By;
 
 public class GetDriver {
 
@@ -69,7 +66,43 @@ public class GetDriver {
 
 		}
 		
-		
+		// Method for getting WebDriver with get baseURL 
+				public static WebDriver getDriver(String browser, String baseUrl, String user) {
+					WebDriver driver = null;
+
+					if (browser.toLowerCase().equals("chrome")) {
+						// Set the location of the Google Chrome driver exe file by set the system
+						
+						ChromeOptions options = new ChromeOptions();
+						options.addArguments("user-data-dir=C:/Users/"+user+"/AppData/Local/Google/Chrome/User Data");
+						
+						
+						System.setProperty("webdriver.chrome.driver", "C:\\jars\\chrome\\chromedriver.exe");
+						
+						driver = new ChromeDriver(options);
+					} else if (browser.toLowerCase().equals("firefox")) {
+						// Set system property
+						System.setProperty("webdriver.gecko.driver", "C:\\jars\\firefox\\geckodriver.exe");
+						// Initialize web driver
+						driver = new FirefoxDriver();
+					}
+					
+					//add general wait for elements
+					driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+					
+					
+					//add maximu time waiting for page to load
+					driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
+					
+					// maximize window
+					driver.manage().window().maximize();
+					
+					//Get baseURL
+					driver.get(baseUrl);
+					return driver;
+
+				}
+				
 		
 	
 

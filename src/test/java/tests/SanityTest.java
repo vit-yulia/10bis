@@ -7,10 +7,8 @@ import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
-import jdk.internal.org.jline.utils.Log;
 import pages.Login;
 import pages.Main;
-import pages.Registration;
 import utilites.GetDriver;
 import utilites.Utilities;
 
@@ -46,13 +44,13 @@ public class SanityTest {
 	private Main main;
 	private Login login;
 	
-	
 	private static final Logger logger = LogManager.getLogger(SanityTest.class);
 	private static String userName;
 	private static String password;
 	private static String browser;
 	private static String baseUrl;
-	private static String name;
+	private static String user;
+	private static String hebresName;
 	
 
 	
@@ -68,9 +66,10 @@ public class SanityTest {
 		browser = Utilities.getDataFromXML("info.xml", "browser", 0);
 		userName = Utilities.getDataFromXML("info.xml", "userName", 0);
 		password = Utilities.getDataFromXML("info.xml", "password", 0);
-		name = "חגי";
+		user = Utilities.getDataFromXML("info.xml", "user", 0);
+		hebresName = Utilities.getDataFromXML("info.xml", "Hebrewname", 0);
 		
-		driver = GetDriver.getDriver(browser, baseUrl);
+		driver = GetDriver.getDriver(browser, baseUrl, user);
 		
 		main = new Main(driver);
 		login = new Login(driver);
@@ -96,15 +95,13 @@ public class SanityTest {
 	
 	@Test(priority = 1, enabled = true, description = "Login 10bis using Facebook")
 	public void LoginUsingFacebook() throws InterruptedException, IOException, ParserConfigurationException, SAXException {
-		
-		
-		
-		
+
 		logger.info("Going to connection page");
 		main.login();
-		login.doLoginFacebook(userName, password, name);
+		logger.info("Going to login with facebook detailse");
+		Assert.assertTrue(login.doLoginFacebook(userName, password, hebresName), "could not login with Facebook account, check logs");
 		
-		logger.info("Successfully Get into 10bis as registred user page");
+		logger.info("Successfully Get into 10bis as registred user page (facebook login)");
 
 	}
 	
