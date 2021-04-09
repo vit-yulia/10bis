@@ -7,6 +7,8 @@ import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
+import jdk.internal.org.jline.utils.Log;
+import pages.Login;
 import pages.Main;
 import pages.Registration;
 import utilites.GetDriver;
@@ -30,29 +32,28 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 
 
-public class RegistrationTest {
+public class SanityTest {
 
 	// Global variables 
 	// Add extent reports
 	private ExtentReports extent;
 	private ExtentTest myTest;
-	private static String reportPaht = System.getProperty("user.dir") + "\\test-output\\reportRegistration.html";
+	private static String reportPaht = System.getProperty("user.dir") + "\\test-output\\reportSanity.html";
 
 	private WebDriver driver;
-	private String baseUrl;
-	
-	
+
 	//pages
 	private Main main;
-	private Registration registration;
-	
-	//Registration details:
-	private final String fullName = "משה משה";
-	private final String mail = "test123456789@test.com";
-	private final String phone = "0545966296";
+	private Login login;
 	
 	
-	private static final Logger logger = LogManager.getLogger(RegistrationTest.class);
+	private static final Logger logger = LogManager.getLogger(SanityTest.class);
+	private static String userName;
+	private static String password;
+	private static String browser;
+	private static String baseUrl;
+	private static String name;
+	
 
 	
 
@@ -64,12 +65,15 @@ public class RegistrationTest {
 		extent.loadConfig(new File(System.getProperty("user.dir") + "\\resources\\extent-config.xml"));
 		
 		baseUrl = Utilities.getDataFromXML("info.xml", "website", 0);
-		String browser =Utilities.getDataFromXML("info.xml", "browser", 0);;
+		browser = Utilities.getDataFromXML("info.xml", "browser", 0);
+		userName = Utilities.getDataFromXML("info.xml", "userName", 0);
+		password = Utilities.getDataFromXML("info.xml", "password", 0);
+		name = "חגי";
 		
 		driver = GetDriver.getDriver(browser, baseUrl);
 		
 		main = new Main(driver);
-		registration = new Registration(driver);
+		login = new Login(driver);
 
 	}
 
@@ -83,34 +87,27 @@ public class RegistrationTest {
 	
 
 	
-	/*  Prerequisite: getting into https://www.10bis.com/
-	 * 		Given: Client is in site 
-	 * 		When: click register link
-	 *  	Then: Getting into Registration page
+	/*  Prerequisite: getting into https://www.10bis.co.il/
+	 * 		Given: Client click connection and  
+	 * 		When: give Facebook login details and click login
+	 *  	Then: Getting into 10bis as registered user
 	 */
 	
-	@Test(priority = 1, enabled = true, description = "verify registration page")
-	public void goToRegister() throws InterruptedException, IOException {
-		logger.info("Going to registration page");
-		Assert.assertTrue(main.register());
-		logger.info("Successfully Get Register page");
+	
+	@Test(priority = 1, enabled = true, description = "Login 10bis using Facebook")
+	public void LoginUsingFacebook() throws InterruptedException, IOException, ParserConfigurationException, SAXException {
+		
+		
+		
+		
+		logger.info("Going to connection page");
+		main.login();
+		login.doLoginFacebook(userName, password, name);
+		
+		logger.info("Successfully Get into 10bis as registred user page");
 
 	}
 	
-	
-	/*  Prerequisite: getting into https://10bis.co.il, click Registration button
-	 * 		Given: client is in registration page
-	 * 		When: fill registration details
-	 *  	Then: details are being saved
-	 */
-	
-	@Test(priority = 2, enabled = true, description = "verify registration page")
-	public void fillRegistrationDetails() throws InterruptedException, IOException {
-		logger.info("Begin to fill registration");
-		Assert.assertTrue(registration.fill_registration(fullName, mail, phone));
-		logger.info("Successfully Get Register page");
-
-	}
 	
 	
 	

@@ -10,7 +10,7 @@ public class Registration extends Base {
 		super(driver);
 	}
 
-	// start registration
+	// start Registration
 	public boolean fill_registration(String fullName, String email, String phone) throws InterruptedException {
 
 		

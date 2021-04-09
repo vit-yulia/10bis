@@ -20,6 +20,19 @@ public class Main extends Base {
 			return false;
 
 	}
+	
+	// start login
+		public boolean login() throws InterruptedException {
+			
+			//Click connection
+			click(By.xpath("//button[text()='התחברות']"));
+			
+			if (isExist(By.xpath("//*[@id=\"modal-title\"][text()='איזה כיף שחזרת אלינו!']")))
+				return true;
+			else
+				return false;
+
+		}
 
 	// select account
 	public boolean selectAccount() throws InterruptedException {

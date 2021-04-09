@@ -2,4 +2,6 @@
 <config>
 <browser>chrome</browser>
 <website>https://www.10bis.co.il/</website>
+<userName>your-email</userName>
+<password>your-password</password>
 </config>
