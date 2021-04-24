@@ -1,5 +1,7 @@
 package pages;
 
+import java.util.Set;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.xml.LaunchSuite.ExistingSuite;
@@ -42,5 +44,25 @@ public class Main extends Base {
 				"//div[@class='dropdown custom-select step-one open']//li[@data-value='freelancer-or-smb'][@class='option']"));
 		return true;
 	}
+	
+	public boolean verifyCareerPage() throws InterruptedException {
+		if (!isExist(By.xpath("(//*[@class=\"FooterLink__Text-sc-1ywqpjc-0 cXhlIB\"])[6]"))) {
+			return false;
+		}
+		click(By.xpath("(//*[@class=\"FooterLink__Text-sc-1ywqpjc-0 cXhlIB\"])[6]"));
+		Thread.sleep(1000);
+		String baseHandle = driver.getWindowHandle();
+		Thread.sleep(3000);
+		Set<String> handels = driver.getWindowHandles();
 
+		for (String h : handels) {
+			if (!h.equals(baseHandle))
+				driver.switchTo().window(h);
+		}
+		//return isExist(By.xpath("//*[@id=\"typehead\"]"));
+		return driver.getCurrentUrl().contains("careers.takeaway");
+		
+	}
+
+	
 }

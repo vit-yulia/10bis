@@ -2,8 +2,12 @@
 <config>
 <browser>chrome</browser>
 <website>https://www.10bis.co.il/</website>
-<userName>your-email</userName>
-<password>your-password</password>
-<user>hagai</user>
-<Hebrewname>חגי</Hebrewname>
+<registrationfullName>יוליה ויטנברג</registrationfullName>
+<registrationMail>vitenbergyulia@gmail.com</registrationMail>
+<registrationPhone>0584601942</registrationPhone>
+<userName>yu.yuliia@mail.ru</userName>
+<password>yulia1987</password>
+<Hebrewname>Yuliia</Hebrewname>
+<restaurantName>הגראז'</restaurantName>
+<errorMessage>שדה חובה</errorMessage>
 </config>

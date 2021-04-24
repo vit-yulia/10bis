@@ -7,8 +7,10 @@ import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
+import pages.Login;
 import pages.Main;
-import pages.Registration;
+import pages.Order;
+import pages.SearchRestaurant;
 import utilites.GetDriver;
 import utilites.Utilities;
 
@@ -23,54 +25,46 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 
 
-public class RegistrationTest {
+public class CareerPage {
 
 	// Global variables 
 	// Add extent reports
 	private ExtentReports extent;
 	private ExtentTest myTest;
-	private static String reportPath = System.getProperty("user.dir") + "\\test-output\\reportRegistration.html";
+	private static String reportPaht = System.getProperty("user.dir") + "\\test-output\\reportSanity.html";
 
 	private WebDriver driver;
-	private String baseUrl;
-	private String browser;
-	
+
 	//pages
 	private Main main;
-	private Registration registration;
 	
-	//Registration details:
-	private static String fullName;
-	private static String mail;
-	private static String phone;
-	private static final Logger logger = LogManager.getLogger(RegistrationTest.class);
+	private static final Logger logger = LogManager.getLogger(CareerPage.class);
+	private static String browser;
+	private static String baseUrl;
 
 
 	@BeforeClass
 	public void beforeClass() throws ParserConfigurationException, SAXException, IOException {
 		PropertyConfigurator.configure(System.getProperty("user.dir") + "/log4j.properties");
 
-		extent = new ExtentReports(reportPath);
+		extent = new ExtentReports(reportPaht);
 		extent.loadConfig(new File(System.getProperty("user.dir") + "\\resources\\extent-config.xml"));
 		
 		baseUrl = Utilities.getDataFromXML("info.xml", "website", 0);
-		browser =Utilities.getDataFromXML("info.xml", "browser", 0);
-		fullName = Utilities.getDataFromXML("info.xml", "registrationfullName", 0);
-		mail = Utilities.getDataFromXML("info.xml", "registrationMail", 0);
-		phone = Utilities.getDataFromXML("info.xml", "registrationPhone", 0);
-		
-		driver = GetDriver.getDriver(browser, baseUrl);
-		
-		main = new Main(driver);
-		registration = new Registration(driver);
+		browser = Utilities.getDataFromXML("info.xml", "browser", 0);
 
+		driver = GetDriver.getDriver(browser,baseUrl);
+		main = new Main(driver);
+		
 	}
 
 	
@@ -83,34 +77,21 @@ public class RegistrationTest {
 	
 
 	
-	/*  Prerequisite: getting into https://www.10bis.com/
-	 * 		Given: Client is in site 
-	 * 		When: click register link
-	 *  	Then: Getting into Registration page
+	/*  Prerequisite: verify error message
+	 * 		Given: Client open main page  
+	 * 		When: click on Career  button 
+	 *  	Then: Verify that Career page is open
 	 */
 	
-	@Test(priority = 1, enabled = true, description = "verify registration page")
-	public void goToRegister() throws InterruptedException, IOException {
-		logger.info("Going to registration page");
-		Assert.assertTrue(main.register());
-		logger.info("Successfully Get Register page");
+	@Test(priority = 1, enabled = true, description = "Verify Career Page ")
+	public void verifyCareerPage() throws InterruptedException, IOException, ParserConfigurationException, SAXException {
 
+		logger.info("On the Main page click on career button");		
+		Assert.assertTrue(main.isExist(By.xpath("(//*[@class=\"FooterLink__Text-sc-1ywqpjc-0 cXhlIB\"])[6]")), "canot fin career button");
+		Assert.assertTrue(main.verifyCareerPage(), "carrer page is not found");
+		logger.info("Verify carrer page in  is exists");
 	}
 	
-	
-	/*  Prerequisite: getting into https://10bis.co.il, click Registration button
-	 * 		Given: client is in registration page
-	 * 		When: fill registration details
-	 *  	Then: details are being saved
-	 */
-	
-	@Test(dependsOnMethods = { "goToRegister" }, priority = 2, enabled = true, description = "verify registration page")
-	public void fillRegistrationDetails() throws InterruptedException, IOException {
-		logger.info("Begin to fill registration");
-		Assert.assertTrue(registration.fill_registration(fullName, mail, phone), "Cant register, Email or Phone already exists");
-		logger.info("Successfully Get Register page");
-
-	}
 	
 	
 	@AfterMethod
@@ -129,7 +110,7 @@ public class RegistrationTest {
 
 		myTest.log(LogStatus.INFO, "Finish test", "Finish test ");
 		extent.endTest(myTest);
-	
+
 	}
 
 	@AfterClass

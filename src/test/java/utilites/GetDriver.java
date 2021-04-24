@@ -67,15 +67,16 @@ public class GetDriver {
 		}
 		
 		// Method for getting WebDriver with get baseURL 
-				public static WebDriver getDriver(String browser, String baseUrl, String user) {
+				public static WebDriver getDriver(String browser, String baseUrl, boolean incognito) {
 					WebDriver driver = null;
 
 					if (browser.toLowerCase().equals("chrome")) {
 						// Set the location of the Google Chrome driver exe file by set the system
 						
 						ChromeOptions options = new ChromeOptions();
-						options.addArguments("user-data-dir=C:/Users/"+user+"/AppData/Local/Google/Chrome/User Data");
-						
+						if (incognito) {
+							options.addArguments("incognito");
+						}					
 						
 						System.setProperty("webdriver.chrome.driver", "C:\\jars\\chrome\\chromedriver.exe");
 						
